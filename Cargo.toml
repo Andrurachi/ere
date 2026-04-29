@@ -93,6 +93,7 @@ serde_bytes = { version = "0.11.19", default-features = false }
 serde_json = "1.0.142"
 serde_yaml = "0.9.34"
 sha2 = { version = "0.10.9", default-features = false }
+sha3 = { version = "0.10.8", default-features = false }
 strum = "0.27.2"
 tempfile = "3.20.0"
 thiserror = { version = "2.0.12", default-features = false }
@@ -111,8 +112,17 @@ twirp-build = "0.10"
 uuid = "1"
 
 # Airbender dependencies
-airbender_execution_utils = { git = "https://github.com/matter-labs/zksync-airbender", package = "execution_utils", tag = "v0.5.2" }
-airbender_riscv_common = { git = "https://github.com/matter-labs/zksync-airbender", package = "riscv_common", tag = "v0.5.2", default-features = false }
+#
+# airbender-host comes from matter-labs/airbender-platform pinned to a
+# specific commit (the repo has no dev branch as of 2026-04-28). All
+# zksync-airbender direct deps use branch = "dev" so Cargo unifies them
+# with airbender-host's transitive copies; the [patch] table at the end
+# of this file pins the actual zksync-airbender revision used.
+airbender-host = { git = "https://github.com/matter-labs/airbender-platform", rev = "097f14891ae663fc51a2312da964780c3bdafbc7", default-features = false }
+airbender_riscv_common = { git = "https://github.com/matter-labs/zksync-airbender", package = "riscv_common", branch = "dev", default-features = false }
+execution_utils = { git = "https://github.com/matter-labs/zksync-airbender", branch = "dev", default-features = false }
+gpu_prover = { git = "https://github.com/matter-labs/zksync-airbender", branch = "dev", default-features = false }
+riscv_transpiler = { git = "https://github.com/matter-labs/zksync-airbender", branch = "dev", default-features = false, features = ["jit"] }
 
 # OpenVM dependencies
 openvm = { git = "https://github.com/openvm-org/openvm.git", tag = "v1.4.3", default-features = false }
@@ -186,3 +196,11 @@ ere-util-build = { path = "crates/util/build" }
 ere-util-compile = { path = "crates/util/compile" }
 ere-util-test = { path = "crates/util/test" }
 ere-util-tokio = { path = "crates/util/tokio" }
+
+[patch."https://github.com/matter-labs/zksync-airbender"]
+common_constants = { git = "https://github.com/matter-labs//zksync-airbender", rev = "591efe90f1a5f0e0cfe23ac366bf0fc221fbfe0a" }
+blake2s_u32 = { git = "https://github.com/matter-labs//zksync-airbender", rev = "591efe90f1a5f0e0cfe23ac366bf0fc221fbfe0a" }
+riscv_common = { git = "https://github.com/matter-labs//zksync-airbender", rev = "591efe90f1a5f0e0cfe23ac366bf0fc221fbfe0a" }
+execution_utils = { git = "https://github.com/matter-labs//zksync-airbender", rev = "591efe90f1a5f0e0cfe23ac366bf0fc221fbfe0a" }
+gpu_prover = { git = "https://github.com/matter-labs//zksync-airbender", rev = "591efe90f1a5f0e0cfe23ac366bf0fc221fbfe0a" }
+riscv_transpiler = { git = "https://github.com/matter-labs//zksync-airbender", rev = "591efe90f1a5f0e0cfe23ac366bf0fc221fbfe0a" }
